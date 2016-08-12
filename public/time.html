@@ -2,16 +2,26 @@
   <h3 ng-show="config.title">{{config.title}}</h3>
   
   <carousel interval="0">
-      <slide>
-        quick select
+      <slide active="activeSlide.quick">
+        <h4 style="margin-top: 0px; margin-bottom: 2px;">
+          <strong><i aria-hidden="true" class="fa fa-clock-o"></i> Quick</strong>
+        </h4>
+        <div>
+          <select ng-model="selectedQuick" ng-options="option.display for option in quickLists" ng-change="setQuick(selectedQuick)"></select>
+        </div>
       </slide>
 
-      <slide>
-        relative
+      <slide active="activeSlide.relative">
+        <h4 style="margin-top: 0px; margin-bottom: 2px;">
+          <strong><i aria-hidden="true" class="fa fa-clock-o"></i> Relative</strong>
+        </h4>
       </slide>
 
-      <slide active="slide.active">
-        <form name="dashboardTime" ng-submit="updateKbnTime()" style="height: 80px;">
+      <slide index="2" active="activeSlide.absolute">
+        <h4 style="margin-top: 0px; margin-bottom: 2px;">
+          <strong><i aria-hidden="true" class="fa fa-clock-o"></i> Absolute</strong>
+        </h4>
+        <form name="dashboardTime" ng-submit="updateKbnTime()">
           <div style="display: inline-block;">
             <label class="small">From: <span ng-show="!time.from"><i>Invalid Date</i></span>
             </label>
@@ -34,7 +44,10 @@
       </slide>
 
       <slide>
-        time range controls
+        <h4 style="margin-top: 0px; margin-bottom: 2px;">
+          <strong><i aria-hidden="true" class="fa fa-clock-o"></i> Time Animation</strong> 
+          {{time.title}}
+        </h4>
       </slide>
     </carousel>
   
