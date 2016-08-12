@@ -1,0 +1,206 @@
+align-content normal
+align-items normal
+align-self  normal
+animation-delay 0s
+animation-direction normal
+animation-duration  0s
+animation-fill-mode none
+animation-iteration-count 1
+animation-name  none
+animation-play-state  running
+animation-timing-function ease
+backface-visibility visible
+background-attachment scroll
+background-blend-mode normal
+background-clip border-box
+background-color  transparent
+background-image  none
+background-origin padding-box
+background-position 0% 0%
+background-repeat repeat
+background-size auto auto
+border-bottom-color rgb(31,​ 107,​ 122)
+border-bottom-left-radius 0px
+border-bottom-right-radius  0px
+border-bottom-style none
+border-bottom-width 0px
+border-collapse separate
+border-image-outset 0 0 0 0
+border-image-repeat stretch stretch
+border-image-slice  100% 100% 100% 100%
+border-image-source none
+border-image-width  1 1 1 1
+border-left-color rgb(31,​ 107,​ 122)
+border-left-style none
+border-left-width 0px
+border-right-color  rgb(31,​ 107,​ 122)
+border-right-style  none
+border-right-width  0px
+border-spacing  0px 0px
+border-top-color  rgb(31,​ 107,​ 122)
+border-top-left-radius  0px
+border-top-right-radius 0px
+border-top-style  none
+border-top-width  0px
+bottom  auto
+box-decoration-break  slice
+box-shadow  none
+box-sizing  border-box
+caption-side  top
+clear none
+clip  auto
+color rgb(31,​ 107,​ 122)
+content none
+counter-increment none
+counter-reset none
+cursor  pointer
+direction ltr
+display inline
+empty-cells show
+flex-basis  auto
+flex-direction  row
+flex-grow 0
+flex-shrink 1
+flex-wrap nowrap
+float none
+font-family "Lato",​"Helvetica Neue",​Helvetica,​Arial,​sans-serif
+font-feature-settings normal
+font-kerning  auto
+font-language-override  normal
+font-size 13px
+font-size-adjust  none
+font-stretch  normal
+font-style  normal
+font-synthesis  weight style
+font-variant  normal
+font-variant-alternates normal
+font-variant-caps normal
+font-variant-east-asian normal
+font-variant-ligatures  normal
+font-variant-numeric  normal
+font-variant-position normal
+font-weight 400
+height  auto
+hyphens manual
+image-orientation 0deg
+ime-mode  auto
+isolation auto
+justify-content normal
+justify-items normal
+justify-self  normal
+left  auto
+letter-spacing  normal
+line-height 18.5667px
+list-style-image  none
+list-style-position outside
+list-style-type none
+margin-bottom 0px
+margin-left 0px
+margin-right  0px
+margin-top  0px
+marker-offset auto
+max-height  none
+max-width none
+min-height  0px
+min-width 0px
+mix-blend-mode  normal
+object-fit  fill
+object-position 50% 50%
+opacity 1
+order 0
+outline-color rgb(31,​ 107,​ 122)
+outline-offset  0px
+outline-style none
+outline-width 0px
+overflow  visible
+overflow-x  visible
+overflow-y  visible
+padding-bottom  0px
+padding-left  0px
+padding-right 0px
+padding-top 0px
+page-break-after  auto
+page-break-before auto
+page-break-inside auto
+perspective none
+perspective-origin  29.0833px 7.88333px
+pointer-events  auto
+position  static
+quotes  "“" "”" "‘" "’"
+resize  none
+right auto
+ruby-align  space-around
+ruby-position over
+scroll-behavior auto
+scroll-snap-coordinate  none
+scroll-snap-destination 0px 0px
+scroll-snap-points-x  none
+scroll-snap-points-y  none
+scroll-snap-type-x  none
+scroll-snap-type-y  none
+table-layout  auto
+text-align  center
+text-decoration none
+text-decoration-color rgb(31,​ 107,​ 122)
+text-decoration-line  none
+text-decoration-style solid
+text-emphasis-color rgb(31,​ 107,​ 122)
+text-emphasis-position  over right
+text-emphasis-style none
+text-indent 0px
+text-orientation  mixed
+text-overflow clip
+text-shadow none
+text-transform  none
+top auto
+transform none
+transform-origin  29.0833px 7.88333px
+transform-style flat
+transition-delay  0s
+transition-duration 0s
+transition-property all
+transition-timing-function  ease
+unicode-bidi  normal
+vertical-align  baseline
+visibility  visible
+white-space normal
+width auto
+will-change auto
+word-break  normal
+word-spacing  0px
+word-wrap normal
+writing-mode  horizontal-tb
+z-index auto
+clip-path none
+clip-rule nonzero
+color-interpolation srgb
+color-interpolation-filters linearrgb
+dominant-baseline auto
+fill  rgb(0,​ 0,​ 0)
+fill-opacity  1
+fill-rule nonzero
+filter  none
+flood-color rgb(0,​ 0,​ 0)
+flood-opacity 1
+image-rendering auto
+lighting-color  rgb(255,​ 255,​ 255)
+marker-end  none
+marker-mid  none
+marker-start  none
+mask  none
+mask-type luminance
+paint-order normal
+shape-rendering auto
+stop-color  rgb(0,​ 0,​ 0)
+stop-opacity  1
+stroke  none
+stroke-dasharray  none
+stroke-dashoffset 0px
+stroke-linecap  butt
+stroke-linejoin miter
+stroke-miterlimit 4
+stroke-opacity  1
+stroke-width  1px
+text-anchor start
+text-rendering  auto
+vector-effect none
