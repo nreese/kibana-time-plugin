@@ -1,25 +1,42 @@
 <div ng-controller="KbnTimeVisController" class="time-vis">
   <h3 ng-show="config.title">{{config.title}}</h3>
   
-  <form name="dashboardTime" ng-submit="updateKbnTime()" style="height: 80px;">
-    <div style="display: inline-block;">
-      <label class="small">From: <span ng-show="!time.from"><i>Invalid Date</i></span>
-      </label>
-      <input type="text" required class="form-control" input-datetime="{{format}}" ng-model="time.from">
-    </div>
+  <carousel interval="0">
+      <slide>
+        quick select
+      </slide>
 
-    <div style="display: inline-block;">
-      <label class="small">To: <span ng-show="!time.to"><i>Invalid Date</i></span>
-      </label>
-      <input type="text" required class="form-control" input-datetime="{{format}}" ng-model="time.to">
-    </div>
+      <slide>
+        relative
+      </slide>
 
-    <div style="display: inline-block;">
-      <button class="btn btn-primary" style="margin-bottom: 60px;" ng-disabled="time.from > time.to || !time.from || !time.to" type="submit">
-        Go
-      </button>
-      <span class="small" ng-show="time.from > time.to"><strong>From</strong> must occur before <strong>To</strong></span>
-    </div>
-  </form>
+      <slide active="slide.active">
+        <form name="dashboardTime" ng-submit="updateKbnTime()" style="height: 80px;">
+          <div style="display: inline-block;">
+            <label class="small">From: <span ng-show="!time.from"><i>Invalid Date</i></span>
+            </label>
+            <input type="text" required class="form-control" input-datetime="{{format}}" ng-model="time.from">
+          </div>
+
+          <div style="display: inline-block;">
+            <label class="small">To: <span ng-show="!time.to"><i>Invalid Date</i></span>
+            </label>
+            <input type="text" required class="form-control" input-datetime="{{format}}" ng-model="time.to">
+          </div>
+
+          <div style="display: inline-block;">
+            <button class="btn btn-primary" style="margin-bottom: 60px;" ng-disabled="time.from > time.to || !time.from || !time.to" type="submit">
+              Go
+            </button>
+            <span class="small" ng-show="time.from > time.to"><strong>From</strong> must occur before <strong>To</strong></span>
+          </div>
+        </form>
+      </slide>
+
+      <slide>
+        time range controls
+      </slide>
+    </carousel>
+  
 
 </div>

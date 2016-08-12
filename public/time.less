@@ -1,7 +1,7 @@
 @import (reference) "~ui/styles/mixins.less";
 
 .time-vis {
-  padding: 1em;
+  padding: 0;
   width: 100%;
 }
 
@@ -27,4 +27,22 @@
 
   }
 
+}
+
+.carousel {
+  height: 100%;
+}
+
+.carousel-indicators {
+  position: relative;
+  top: 85%;
+  bottom: 0px;
+}
+
+.carousel-indicators li {
+  border: 1px solid black;
+}
+
+.carousel-indicators .active {
+  background-color: black;
 }
