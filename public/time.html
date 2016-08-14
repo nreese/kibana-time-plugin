@@ -7,7 +7,8 @@
           <strong><i aria-hidden="true" class="fa fa-clock-o"></i> Quick</strong>
         </h4>
         <div>
-          <select ng-model="selectedQuick" ng-options="option.display for option in quickLists" ng-change="setQuick(selectedQuick)"></select>
+          <select ng-model="selectedQuick" ng-options="option.display for option in quickLists" ng-change="setQuick(selectedQuick)">
+          </select>
         </div>
       </slide>
 
@@ -81,22 +82,22 @@
         </h4>
         <form ng-submit="setAbsolute()">
           <div style="display: inline-block;">
-            <label class="small" style="float:left;">From: <span ng-show="!time.from"><i>Invalid Date</i></span>
+            <label class="small" style="float:left;">From: <span ng-show="!time.absolute_from"><i>Invalid Date</i></span>
             </label>
-            <input type="text" required class="form-control" input-datetime="{{format}}" ng-model="time.from">
+            <input type="text" required class="form-control" input-datetime="{{format}}" ng-model="time.absolute_from">
           </div>
 
           <div style="display: inline-block;">
-            <label class="small" style="float:left;">To: <span ng-show="!time.to"><i>Invalid Date</i></span>
+            <label class="small" style="float:left;">To: <span ng-show="!time.absolute_to"><i>Invalid Date</i></span>
             </label>
-            <input type="text" required class="form-control" input-datetime="{{format}}" ng-model="time.to">
+            <input type="text" required class="form-control" input-datetime="{{format}}" ng-model="time.absolute_to">
           </div>
 
           <div style="display: inline-block;">
-            <button class="btn btn-primary" style="margin-bottom: 60px;" ng-disabled="time.from > time.to || !time.from || !time.to" type="submit">
+            <button class="btn btn-primary" style="margin-bottom: 60px;" ng-disabled="time.absolute_from > time.absolute_to || !time.absolute_from || !time.absolute_to" type="submit">
               Go
             </button>
-            <span class="small" ng-show="time.from > time.to"><strong>From</strong> must occur before <strong>To</strong></span>
+            <span class="small" ng-show="time.absolute_from > time.absolute_to"><strong>From</strong> must occur before <strong>To</strong></span>
           </div>
         </form>
       </slide>

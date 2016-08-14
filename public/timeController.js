@@ -6,7 +6,7 @@ define(function (require) {
   require('ui/timepicker/quick_ranges');
   require('ui/timepicker/time_units');
   
-  module.controller('KbnTimeVisController', function (quickRanges, timeUnits, $scope, $rootScope, Private, $filter) {
+  module.controller('KbnTimeVisController', function (quickRanges, timeUnits, $scope, $rootScope, Private, $filter, $timeout) {
     $rootScope.plugin = {
       timePlugin: {}
     };
@@ -16,7 +16,8 @@ define(function (require) {
 
     $rootScope.$watchMulti([
       '$$timefilter.time.from',
-      '$$timefilter.time.to'
+      '$$timefilter.time.to',
+      '$$timefilter.time.mode'
     ], setTime);
 
     $scope.quickLists = quickRanges;
@@ -36,63 +37,112 @@ define(function (require) {
       preview: undefined,
       round: false
     };
+    $scope.time = {
+      from: moment(),
+      to: moment(),
+      mode: ""
+    };
 
-    function setTime(rangeA, rangeB) {
-      //clean up old selections
-      $scope.activeSlide = {
-        absolute: false,
-        quick: false,
-        relative: false
-      };
-      $scope.selectedQuick = null;
-
-      //set new selections based on new time
+    function setTime(rangeA) {
       var from = rangeA[0];
       var to = rangeA[1];
-      $scope.time = {
-        from: dateMath.parse(from),
-        to: dateMath.parse(to, true)
+      var mode = rangeA[2];
+      var ours_ms = {
+        from: dateMath.parse($scope.time.from).toDate().getTime(),
+        to: dateMath.parse($scope.time.to).toDate().getTime()
       }
-      setRelativeParts(to, from);
-      if('quick' === $rootScope.$$timefilter.time.mode) {
-        $scope.activeSlide.quick = true;
-        for(var i=0; i<quickRanges.length; i++) {
-          if(quickRanges[i].from === from && quickRanges[i].to === to) {
-            $scope.selectedQuick = quickRanges[i];
-            $scope.time.title = quickRanges[i].display;
-            break;
-          }
+      var theirs_ms = {
+        from: dateMath.parse(from).toDate().getTime(),
+        to: dateMath.parse(to).toDate().getTime()
+      }
+      console.log("from, ours: " + ours_ms.from + ", theirs: " + theirs_ms.from);
+      console.log("to, ours: " + ours_ms.to + ", theirs: " + theirs_ms.to);
+      console.log("mode, ours: " + $scope.time.mode + ", theirs: " + mode);
+
+      //setTime is called from watching kibana's timefilter
+      //Avoid updating our $scope if the timefilter change is triggered by us
+      if($scope.time.mode !== mode
+        || Math.abs(ours_ms.from - theirs_ms.from) > 500
+        || Math.abs(ours_ms.to - theirs_ms.to) > 500) {
+        console.log("updating KbnTimeVisController.$scope stay in sync with kibana timefilter");
+        //clean up old selections
+        $scope.activeSlide = {
+          absolute: false,
+          quick: false,
+          relative: false
+        };
+
+        //set new selections based on new time
+        $scope.time = {
+          from: from,
+          to: to,
+          mode: mode,
+          absolute_from: dateMath.parse(from),
+          absolute_to: dateMath.parse(to, true)
         }
-      } else if ('relative' === $rootScope.$$timefilter.time.mode) {
-        $scope.activeSlide.relative = true;
-        $scope.time.title = "";
-      } else {
-        $scope.activeSlide.absolute = true;
-        $scope.time.title = "";
+        setRelativeParts(to, from);
+        if('quick' === $rootScope.$$timefilter.time.mode) {
+          $scope.activeSlide.quick = true;
+          for(var i=0; i<quickRanges.length; i++) {
+            if(quickRanges[i].from === from && quickRanges[i].to === to) {
+              $scope.selectedQuick = quickRanges[i];
+              $scope.time.title = quickRanges[i].display;
+              break;
+            }
+          }
+        } else if ('relative' === $rootScope.$$timefilter.time.mode) {
+          $scope.activeSlide.relative = true;
+          $scope.time.title = "";
+        } else {
+          $scope.activeSlide.absolute = true;
+          $scope.time.title = "";
+        }
       }
     }
 
-    setTime([$rootScope.$$timefilter.time.from, $rootScope.$$timefilter.time.to]);
+    setTime([
+      $rootScope.$$timefilter.time.from, 
+      $rootScope.$$timefilter.time.to,
+      $rootScope.$$timefilter.time.mode]);
 
     $scope.setAbsolute = function() {
-      $rootScope.$$timefilter.time.from = $scope.time.from;
-      $rootScope.$$timefilter.time.to = $scope.time.to;
-      $rootScope.$$timefilter.time.mode = 'absolute';
+      $scope.time.mode = 'absolute';
+      $scope.time.from = $scope.time.absolute_from;
+      $scope.time.to = $scope.time.absolute_to;
+      updateKbnTime();
     };
 
     $scope.setRelative = function () {
-      $rootScope.$$timefilter.time.from = getRelativeString();
-      $rootScope.$$timefilter.time.to = 'now';
-      $rootScope.$$timefilter.time.mode = 'relative';
+      $scope.time.title = 'relative title';
+      $scope.time.from = getRelativeString();
+      $scope.time.to = 'now';
+      $scope.time.mode = 'relative';
+      updateKbnTime();
     };
 
     $scope.setQuick = function (selectedQuick) {
-      $scope.absoluteActive = true;
-      $rootScope.$$timefilter.time.mode = 'quick';
-      $rootScope.$$timefilter.time.from = selectedQuick.from;
-      $rootScope.$$timefilter.time.to = selectedQuick.to;
       $scope.time.title = selectedQuick.display;
+      $scope.time.from = selectedQuick.from;
+      $scope.time.to = selectedQuick.to;
+      $scope.time.mode = 'quick';
+      updateKbnTime();
     };
+
+    function updateKbnTime() {
+      $rootScope.$$timefilter.time.from = $scope.time.from;
+      $rootScope.$$timefilter.time.to = $scope.time.to;
+      $rootScope.$$timefilter.time.mode = $scope.time.mode;
+      
+      //keep other carousel slides in sync with new values
+      if($scope.time.mode !== 'absolute') {
+        $scope.time.absolute_from = dateMath.parse($scope.time.from);
+        $scope.time.absolute_to = dateMath.parse($scope.time.to, true);
+      }
+      if($scope.time.mode !== 'relative') {
+        //wrapped in $timeout to avoid calling $apply while all ready in progress
+        $timeout(setRelativeParts($scope.time.to, $scope.time.from), 0);
+      }
+    }
 
     $scope.$watch('vis.params.title', function (title) {
       $scope.config.title = title;
