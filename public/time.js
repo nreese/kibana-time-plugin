@@ -1,5 +1,7 @@
 define(function (require) {
   require('ui/registry/vis_types').register(TimeVisProvider);
+  require('plugins/kibana-time-plugin/lib/bootstrap-addons/dist/css/bootstrap-addons.css');
+  require('plugins/kibana-time-plugin/lib/bootstrap-addons/dist/js/bootstrap-addons.js');
   require('plugins/kibana-time-plugin/time.less');
   require('plugins/kibana-time-plugin/timeController');
 

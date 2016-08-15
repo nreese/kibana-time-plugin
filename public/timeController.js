@@ -1,7 +1,7 @@
 define(function (require) {
   var moment = require('moment');
   var dateMath = require('ui/utils/dateMath');
-  var module = require('ui/modules').get('kibana/kibana-time-plugin');
+  var module = require('ui/modules').get('kibana/kibana-time-plugin', ['kibana', 'BootstrapAddons']);
   var _ = require('lodash');
   require('ui/timepicker/quick_ranges');
   require('ui/timepicker/time_units');
@@ -19,6 +19,14 @@ define(function (require) {
       '$$timefilter.time.to',
       '$$timefilter.time.mode'
     ], setTime);
+
+    var changeVisOff = $rootScope.$on('change:vis', function () {
+      $scope.$broadcast('timesliderForceRender');
+      //_.debounce(resize, 250);
+    });
+    $scope.$on('$destroy', function() {
+      changeVisOff();
+    });
 
     $scope.quickLists = quickRanges;
     $scope.units = timeUnits;
@@ -99,11 +107,18 @@ define(function (require) {
         }
       }
     }
-
     setTime([
       $rootScope.$$timefilter.time.from, 
       $rootScope.$$timefilter.time.to,
       $rootScope.$$timefilter.time.mode]);
+
+    $scope.filterByTime = function() {
+      console.log('filterByTime not implemented');
+    }
+
+    $scope.removeTimeFilter = function() {
+      console.log('removeTimeFilter not implemented');
+    }
 
     $scope.setAbsolute = function() {
       $scope.time.mode = 'absolute';

@@ -107,6 +107,7 @@
           <strong><i aria-hidden="true" class="fa fa-clock-o"></i> Time Animation</strong> 
           {{time.title}}
         </h4>
+        <timeslider start="time.absolute_from.toDate()" end="time.absolute_to.toDate()" ticks="10" on-change="filterByTime" on-clear="removeTimeFilter" style="margin-left: 96px; margin-right: 95px;"></timeslider>
       </slide>
     </carousel>
   
