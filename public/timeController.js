@@ -51,12 +51,29 @@ define(function (require) {
       to: moment()
     };
 
+    //When timeslider carousel slide is not displayed, it has a width of 0
+    //attach click handler to carousel controls to redraw
+    $timeout(function() {
+      var elems = document.getElementsByClassName('carousel-control');
+      for (var i=0; i<elems.length; i++) {
+        elems[i].onclick = function() {
+          updateTimeslider();
+        }
+      }
+      var elems = document.querySelectorAll('.carousel-indicators li');
+      for (var i=0; i<elems.length; i++) {
+        elems[i].onclick = function() {
+          updateTimeslider();
+        }
+      }
+    }, 0);
+
     function setTime(rangeA) {
       var from = rangeA[0];
       var to = rangeA[1];
       var ours_ms = {
-        from: expectedFrom.toDate().getTime(),
-        to: expectedTo.toDate().getTime()
+        from: dateMath.parse(expectedFrom).toDate().getTime(),
+        to: dateMath.parse(expectedTo, true).toDate().getTime()
       }
       var theirs_ms = {
         from: dateMath.parse(from).toDate().getTime(),
@@ -118,8 +135,8 @@ define(function (require) {
 
     $scope.removeTimeFilter = function() {
       console.log("timeslider - removing time filter");
-      expectedFrom = dateMath.parse($scope.time.from);
-      expectedTo = dateMath.parse($scope.time.to, true);
+      expectedFrom = $scope.time.from;
+      expectedTo = $scope.time.to;
       updateKbnTime();
     }
 
@@ -127,8 +144,8 @@ define(function (require) {
       $scope.time.mode = 'absolute';
       $scope.time.from = $scope.time.absolute_from;
       $scope.time.to = $scope.time.absolute_to;
-      expectedFrom = dateMath.parse($scope.time.from);
-      expectedTo = dateMath.parse($scope.time.to, true);
+      expectedFrom = $scope.time.from;
+      expectedTo = $scope.time.to;
       updateKbnTime();
     };
 
@@ -137,8 +154,8 @@ define(function (require) {
       $scope.time.from = getRelativeString();
       $scope.time.to = 'now';
       $scope.time.mode = 'relative';
-      expectedFrom = dateMath.parse($scope.time.from);
-      expectedTo = dateMath.parse($scope.time.to, true);
+      expectedFrom = $scope.time.from;
+      expectedTo = $scope.time.to;
       updateKbnTime();
     };
 
@@ -147,8 +164,8 @@ define(function (require) {
       $scope.time.from = selectedQuick.from;
       $scope.time.to = selectedQuick.to;
       $scope.time.mode = 'quick';
-      expectedFrom = dateMath.parse($scope.time.from);
-      expectedTo = dateMath.parse($scope.time.to, true);
+      expectedFrom = $scope.time.from;
+      expectedTo = $scope.time.to, true;
       updateKbnTime();
     };
 
@@ -170,7 +187,7 @@ define(function (require) {
         //wrapped in $timeout to avoid calling $apply while all ready in progress
         $timeout(setRelativeParts($scope.time.to, $scope.time.from), 0);
       }
-      //updateTimeslider();
+      updateTimeslider();
     }
 
     function updateTimeslider() {
