@@ -16,8 +16,7 @@ define(function (require) {
 
     $rootScope.$watchMulti([
       '$$timefilter.time.from',
-      '$$timefilter.time.to',
-      '$$timefilter.time.mode'
+      '$$timefilter.time.to'
     ], setTime);
 
     var changeVisOff = $rootScope.$on('change:vis', function () {
@@ -28,6 +27,8 @@ define(function (require) {
       changeVisOff();
     });
 
+    var expectedFrom = moment();
+    var expectedTo = moment();
     $scope.quickLists = quickRanges;
     $scope.units = timeUnits;
     $scope.relativeOptions = [
@@ -47,17 +48,15 @@ define(function (require) {
     };
     $scope.time = {
       from: moment(),
-      to: moment(),
-      mode: ""
+      to: moment()
     };
 
     function setTime(rangeA) {
       var from = rangeA[0];
       var to = rangeA[1];
-      var mode = rangeA[2];
       var ours_ms = {
-        from: dateMath.parse($scope.time.from).toDate().getTime(),
-        to: dateMath.parse($scope.time.to).toDate().getTime()
+        from: expectedFrom.toDate().getTime(),
+        to: expectedTo.toDate().getTime()
       }
       var theirs_ms = {
         from: dateMath.parse(from).toDate().getTime(),
@@ -65,12 +64,10 @@ define(function (require) {
       }
       console.log("from, ours: " + ours_ms.from + ", theirs: " + theirs_ms.from);
       console.log("to, ours: " + ours_ms.to + ", theirs: " + theirs_ms.to);
-      console.log("mode, ours: " + $scope.time.mode + ", theirs: " + mode);
-
+      
       //setTime is called from watching kibana's timefilter
       //Avoid updating our $scope if the timefilter change is triggered by us
-      if($scope.time.mode !== mode
-        || Math.abs(ours_ms.from - theirs_ms.from) > 500
+      if(Math.abs(ours_ms.from - theirs_ms.from) > 500
         || Math.abs(ours_ms.to - theirs_ms.to) > 500) {
         console.log("updating KbnTimeVisController.$scope stay in sync with kibana timefilter");
         //clean up old selections
@@ -84,7 +81,6 @@ define(function (require) {
         $scope.time = {
           from: from,
           to: to,
-          mode: mode,
           absolute_from: dateMath.parse(from),
           absolute_to: dateMath.parse(to, true)
         }
@@ -105,25 +101,34 @@ define(function (require) {
           $scope.activeSlide.absolute = true;
           $scope.time.title = "";
         }
+        updateTimeslider();
       }
     }
     setTime([
       $rootScope.$$timefilter.time.from, 
-      $rootScope.$$timefilter.time.to,
-      $rootScope.$$timefilter.time.mode]);
+      $rootScope.$$timefilter.time.to]);
 
-    $scope.filterByTime = function() {
-      console.log('filterByTime not implemented');
+    $scope.filterByTime = function(start, end) {
+      console.log("timeslider - Filtering by time");
+      $scope.time.mode = 'absolute';
+      expectedFrom = moment(start);
+      expectedTo = moment(end);
+      updateKbnTime();
     }
 
     $scope.removeTimeFilter = function() {
-      console.log('removeTimeFilter not implemented');
+      console.log("timeslider - removing time filter");
+      expectedFrom = dateMath.parse($scope.time.from);
+      expectedTo = dateMath.parse($scope.time.to, true);
+      updateKbnTime();
     }
 
     $scope.setAbsolute = function() {
       $scope.time.mode = 'absolute';
       $scope.time.from = $scope.time.absolute_from;
       $scope.time.to = $scope.time.absolute_to;
+      expectedFrom = dateMath.parse($scope.time.from);
+      expectedTo = dateMath.parse($scope.time.to, true);
       updateKbnTime();
     };
 
@@ -132,6 +137,8 @@ define(function (require) {
       $scope.time.from = getRelativeString();
       $scope.time.to = 'now';
       $scope.time.mode = 'relative';
+      expectedFrom = dateMath.parse($scope.time.from);
+      expectedTo = dateMath.parse($scope.time.to, true);
       updateKbnTime();
     };
 
@@ -140,13 +147,19 @@ define(function (require) {
       $scope.time.from = selectedQuick.from;
       $scope.time.to = selectedQuick.to;
       $scope.time.mode = 'quick';
+      expectedFrom = dateMath.parse($scope.time.from);
+      expectedTo = dateMath.parse($scope.time.to, true);
       updateKbnTime();
     };
 
     function updateKbnTime() {
-      $rootScope.$$timefilter.time.from = $scope.time.from;
-      $rootScope.$$timefilter.time.to = $scope.time.to;
+      $rootScope.$$timefilter.time.from = expectedFrom;
+      $rootScope.$$timefilter.time.to = expectedTo;
       $rootScope.$$timefilter.time.mode = $scope.time.mode;
+      console.log("updated kibana mode to " + $scope.time.mode);
+      $timeout(function() {
+        console.log("double check mode: " + $scope.time.mode);
+      }, 0);
       
       //keep other carousel slides in sync with new values
       if($scope.time.mode !== 'absolute') {
@@ -157,6 +170,13 @@ define(function (require) {
         //wrapped in $timeout to avoid calling $apply while all ready in progress
         $timeout(setRelativeParts($scope.time.to, $scope.time.from), 0);
       }
+      //updateTimeslider();
+    }
+
+    function updateTimeslider() {
+      $timeout(function() {
+        $scope.$broadcast('timesliderForceRender');
+      }, 0);
     }
 
     $scope.$watch('vis.params.title', function (title) {
