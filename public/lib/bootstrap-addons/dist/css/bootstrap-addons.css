@@ -1,20 +1,20 @@
-.brush {
+.ba-brush {
   stroke: #666;
   fill-opacity: .125;
   shape-rendering: crispEdges;
 }
 
-.timeslider {
+.ba-timeslider {
   stroke: #337ab7;
   stroke-width: 3;
   fill: white;
 }
 
-.scaleLine {
+.ba-scaleline {
   stroke: #337ab7;
 }
 
-.scaleLabel {
+.ba-scalelabel {
   fill: #337ab7;
   font-size: 0.6em;
 }
