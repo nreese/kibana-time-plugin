@@ -2,7 +2,7 @@ angular.module('BootstrapAddons', ['BootstrapAddonsTemplateCache']);
 angular.module('BootstrapAddons')
 .directive('timeslider', ["$document", "$timeout", function($document, $timeout) {
   const SVG_ID = "timesliderSvg";
-  const MIN_LABEL_SPACING = 60;
+  const MIN_LABEL_SPACING = 8 * 14; //min spacing between labels is roughly 8 chars
   const CONTROLS_WIDTH = 72; //fixed width of buttons used to advance timeslider
   const MS_PER_DAY = 86400000;
   return {
@@ -106,11 +106,14 @@ angular.module('BootstrapAddons')
       }
 
       function redraw() {
-        var oldBrush = brush.extent();
-        drawTimeline();
-        if(oldBrush[0].getTime() !== oldBrush[1].getTime()) {
-          brush.extent([oldBrush[0], oldBrush[1]]);
-          brush(d3.select('.ba-brush'));
+        if(elem[0].clientWidth > 0) {
+          var oldBrush = null;
+          if(brush) oldBush = brush.extent();
+          drawTimeline();
+          if(oldBrush && oldBrush[0].getTime() !== oldBrush[1].getTime()) {
+            brush.extent([oldBrush[0], oldBrush[1]]);
+            brush(d3.select('.ba-brush'));
+          }
         }
       }
 
@@ -118,7 +121,9 @@ angular.module('BootstrapAddons')
         if(autoScale) {
           scope.width = elem[0].clientWidth - CONTROLS_WIDTH;
         }
-        if(scope.width <= 0) scope.width = CONTROLS_WIDTH * 2;
+        if(scope.width <= 0) {
+          return;
+        }
         var numTicks = scope.width / MIN_LABEL_SPACING;
         var timeWidth = scope.end.getTime() - scope.start.getTime();
 
