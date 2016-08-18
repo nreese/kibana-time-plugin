@@ -12,9 +12,6 @@ define(function (require) {
     $rootScope.plugin = {
       timePlugin: {}
     };
-    $scope.config = {
-        title: ""
-    };
 
     $rootScope.$watchMulti([
       '$$timefilter.time.from',
@@ -109,16 +106,13 @@ define(function (require) {
           for(var i=0; i<quickRanges.length; i++) {
             if(quickRanges[i].from === from && quickRanges[i].to === to) {
               $scope.selectedQuick = quickRanges[i];
-              $scope.time.title = quickRanges[i].display;
               break;
             }
           }
         } else if ('relative' === $rootScope.$$timefilter.time.mode) {
           $scope.activeSlide.relative = true;
-          $scope.time.title = "";
         } else {
           $scope.activeSlide.absolute = true;
-          $scope.time.title = "";
         }
         updateTimeslider();
       }
@@ -152,7 +146,6 @@ define(function (require) {
     };
 
     $scope.setRelative = function () {
-      $scope.time.title = 'relative title';
       $scope.time.from = getRelativeString();
       $scope.time.to = 'now';
       $scope.time.mode = 'relative';
@@ -162,7 +155,6 @@ define(function (require) {
     };
 
     $scope.setQuick = function (selectedQuick) {
-      $scope.time.title = selectedQuick.display;
       $scope.time.from = selectedQuick.from;
       $scope.time.to = selectedQuick.to;
       $scope.time.mode = 'quick';
@@ -193,10 +185,6 @@ define(function (require) {
         $scope.$broadcast('timesliderForceRender');
       }, 0);
     }
-
-    $scope.$watch('vis.params.title', function (title) {
-      $scope.config.title = title;
-    });
 
     //Relative date logic copied from https://github.com/elastic/kibana/blob/4.4/src/ui/public/timepicker/timepicker.js
 
