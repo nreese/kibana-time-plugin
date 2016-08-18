@@ -108,7 +108,7 @@ angular.module('BootstrapAddons')
       function redraw() {
         if(elem[0].clientWidth > 0) {
           var oldBrush = null;
-          if(brush) oldBush = brush.extent();
+          if(brush) oldBrush = brush.extent();
           drawTimeline();
           if(oldBrush && oldBrush[0].getTime() !== oldBrush[1].getTime()) {
             brush.extent([oldBrush[0], oldBrush[1]]);

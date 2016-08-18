@@ -7,6 +7,8 @@ define(function (require) {
   require('ui/timepicker/time_units');
   
   module.controller('KbnTimeVisController', function (quickRanges, timeUnits, $scope, $rootScope, Private, $filter, $timeout) {
+    const TIMESLIDER_INSTR = "Click and drag to select a time range."
+    const DATE_FORMAT = 'MMMM Do YYYY, HH:mm:ss';
     $rootScope.plugin = {
       timePlugin: {}
     };
@@ -19,16 +21,16 @@ define(function (require) {
       '$$timefilter.time.to'
     ], setTime);
 
-    var changeVisOff = $rootScope.$on('change:vis', function () {
-      $scope.$broadcast('timesliderForceRender');
-      //_.debounce(resize, 250);
-    });
+    var changeVisOff = $rootScope.$on(
+      'change:vis', 
+      _.debounce(updateTimeslider, 200, false));
     $scope.$on('$destroy', function() {
       changeVisOff();
     });
 
     var expectedFrom = moment();
     var expectedTo = moment();
+    $scope.animationTitle = TIMESLIDER_INSTR;
     $scope.quickLists = quickRanges;
     $scope.units = timeUnits;
     $scope.relativeOptions = [
@@ -126,15 +128,15 @@ define(function (require) {
       $rootScope.$$timefilter.time.to]);
 
     $scope.filterByTime = function(start, end) {
-      console.log("timeslider - Filtering by time");
       $scope.time.mode = 'absolute';
       expectedFrom = moment(start);
       expectedTo = moment(end);
+      $scope.animationTitle = 'Frame: ' + expectedFrom.format(DATE_FORMAT) + ' to ' + expectedTo.format(DATE_FORMAT);
       updateKbnTime();
     }
 
     $scope.removeTimeFilter = function() {
-      console.log("timeslider - removing time filter");
+      $scope.animationTitle = TIMESLIDER_INSTR;
       expectedFrom = $scope.time.from;
       expectedTo = $scope.time.to;
       updateKbnTime();
@@ -173,10 +175,6 @@ define(function (require) {
       $rootScope.$$timefilter.time.from = expectedFrom;
       $rootScope.$$timefilter.time.to = expectedTo;
       $rootScope.$$timefilter.time.mode = $scope.time.mode;
-      console.log("updated kibana mode to " + $scope.time.mode);
-      $timeout(function() {
-        console.log("double check mode: " + $scope.time.mode);
-      }, 0);
       
       //keep other carousel slides in sync with new values
       if($scope.time.mode !== 'absolute') {
