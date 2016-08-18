@@ -1,5 +1,5 @@
 # kibana-time-plugin
-Widget to view and edit the time range from within dashboards. This plugin started as a work around until issue [Timepicker as part of embedded dashboard](https://github.com/elastic/kibana/issues/2739).
+Widget to view and edit the time range from within dashboards. This plugin started as a work around for issue [Timepicker as part of embedded dashboard](https://github.com/elastic/kibana/issues/2739).
 
 Use this widget to view and edit the time range from within dashboards. Use the carousel controls to switch between 'quick', 'relative', 'absolute', and 'time animation' inputs.
 ![preview-create](/resources/quick.png)
