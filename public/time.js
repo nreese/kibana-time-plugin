@@ -15,7 +15,13 @@ define(function (require) {
       description: 'Embedded dashboards do not display the time range or allow users to modify the time range. Use this widget to view and edit the time range with embedded dashboards.',
       template: require('plugins/kibana-time-plugin/time.html'),
       params: {
-        editor: require('plugins/kibana-time-plugin/timeOptions.html')
+          editor: require('plugins/kibana-time-plugin/timeOptions.html'),
+          defaults: {
+              enable_quick: true,
+              enable_relative: true,
+              enable_absolut: true,
+              enable_animation: true,
+          }
       },
       requiresSearch: false
     });

@@ -1,9 +1,16 @@
-<div class="time-vis-options">
-  <p>
-    Use this widget to view and edit the time range from within dashboards. Use the carousel controls to switch between 'quick', 'relative', 'absolute', and 'time animation' inputs.  
-  </p>
-  <h3>Time Animation</h3>
-  <p>
-    Use the time animation controls to easily explore data by time blocks. Click and drag on the time animation bar to select a time range. Grab the brush to move or resize. Click outside of the brush to remove. Use the step buttons to advance to the next time block.
-  </p>
+<div class="form-group">
+  <label>Show Quick Slide</label>
+  <input type="checkbox" ng-model="vis.params.enable_quick" checked class="ng-pristine ng-valid ng-touched">
+</div>
+<div class="form-group">
+  <label>Show Relative Slide</label>
+  <input type="checkbox" ng-model="vis.params.enable_relative" checked class="ng-pristine ng-valid ng-touched">
+</div>
+<div class="form-group">
+  <label>Show Absolut Slide</label>
+  <input type="checkbox" ng-model="vis.params.enable_absolut" checked class="ng-pristine ng-valid ng-touched">
+</div>
+<div class="form-group">
+  <label>Show Animation Slide</label>
+  <input type="checkbox" ng-model="vis.params.enable_animation" checked class="ng-pristine ng-valid ng-touched">
 </div>

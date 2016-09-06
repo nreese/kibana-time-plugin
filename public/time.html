@@ -2,7 +2,7 @@
   <h3 ng-show="config.title">{{config.title}}</h3>
   
   <carousel interval="0">
-      <slide active="activeSlide.quick">
+      <slide ng-if="vis.params.enable_quick" active="activeSlide.quick">
         <h4 style="margin-top: 0px; margin-bottom: 2px;">
           <strong><i aria-hidden="true" class="fa fa-clock-o"></i> Quick</strong>
         </h4>
@@ -12,7 +12,7 @@
         </div>
       </slide>
 
-      <slide active="activeSlide.relative">
+      <slide ng-if="vis.params.enable_relative" active="activeSlide.relative">
         <h4 style="margin-top: 0px; margin-bottom: 2px;">
           <strong><i aria-hidden="true" class="fa fa-clock-o"></i> Relative</strong>
         </h4>
@@ -76,7 +76,7 @@
         </form>
       </slide>
 
-      <slide active="activeSlide.absolute">
+      <slide ng-if="vis.params.enable_absolut" active="activeSlide.absolute">
         <h4 style="margin-top: 0px; margin-bottom: 2px;">
           <strong><i aria-hidden="true" class="fa fa-clock-o"></i> Absolute</strong>
         </h4>
@@ -102,7 +102,7 @@
         </form>
       </slide>
 
-      <slide>
+      <slide ng-if="vis.params.enable_animation">
         <h4 style="margin-top: 0px; margin-bottom: 2px;">
           <strong><i aria-hidden="true" class="fa fa-clock-o"></i> Time Animation</strong> 
           <pretty-duration class="ng-isolate-scope" to="time.to" from="time.from"></pretty-duration>
