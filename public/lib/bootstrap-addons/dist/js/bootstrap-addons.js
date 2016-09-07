@@ -18,6 +18,7 @@ angular.module('BootstrapAddons')
     replace: true,
     link: function(scope, elem, attr) {
       var brush;
+      var snapInterval = getInterval('s');
       var autoScale = false;
       if(!scope.width) {
         autoScale = true;
@@ -28,6 +29,12 @@ angular.module('BootstrapAddons')
 
       scope.$on('timesliderForceRender', function() {
         redraw();
+      });
+      scope.$on('timesliderSnapToNearest', function(event, data) {
+        snapInterval = getInterval(data.snapToNearest);
+        if(brush.extent()[0].getTime() !== brush.extent()[1].getTime()) {
+          select(brush.extent()[0], brush.extent()[1]);
+        }
       });
 
       scope.togglePlay = function() {
@@ -56,23 +63,56 @@ angular.module('BootstrapAddons')
         select(nextStart, nextStop);
       }
 
+      /*
+       * support brush snapping to whole time units
+       * https://bl.ocks.org/mbostock/6232537
+       * 
+       * Brush events fired by interactions directly on svg are outside of angularjs
+       * Wrap callbacks in $timeout so callbacks are always fireed within Angular's $apply context
+       */
       function brushend() {
-        //Brush events fired by interactions directly on svg are outside of angularjs
-        //Wrap callbacks in $timeout so callbacks are always fireed within Angular's $apply context
         if(brush.extent()[0].getTime() === brush.extent()[1].getTime()) {
           $timeout(function() {
             scope.onClear()();
           });
-        } else {
+        } else if (!d3.event.sourceEvent) {
+          //event triggered programmatically - act on event
           $timeout(function() {
             scope.onChange()(brush.extent()[0], brush.extent()[1]);
           });
+        } else {
+          //event triggered by user - snap extent and fire another event.
+          d3.select(this).transition()
+            .call(brush.extent(snappedExent(brush.extent())))
+            .call(brush.event);
         }
+      }
+
+      function snappedExent(extent) {
+        var start = extent[0];
+        var stop = extent[1];
+        var snappedStart = snapInterval.round(start);
+        var snappedStop = snapInterval.round(stop);
+
+        //ensure extent not rounded to zero
+        if (snappedStart.getTime() === snappedStop.getTime()) {
+          snappedStart = snapInterval.floor(start);
+          snappedStop = snapInterval.ceil(stop);
+        }
+
+        //ensure extent not snapped past slider boundaries
+        if(snappedStart.getTime() <= scope.start.getTime()) {
+          snappedStart = scope.start;
+        }
+        if(snappedStop.getTime() >= scope.end.getTime()) {
+          snappedStop = scope.end;
+        }
+        return [snappedStart, snappedStop];
       }
 
       function select(start, end) {
         //update extent
-        brush.extent([start, end]);
+        brush.extent(snappedExent([start, end]));
         //draw brush to match new extent
         brush(d3.select('.ba-brush'));
         //fire brush events
@@ -220,6 +260,37 @@ angular.module('BootstrapAddons')
           }
         }
         return format;
+      }
+
+      function getInterval(snapTo) {
+        var interval;
+        switch (snapTo) {
+          case "s":
+            interval = d3.time.second.utc;
+            break;
+          case "m":
+            interval = d3.time.minute.utc;
+            break;
+          case "h":
+            interval = d3.time.hour.utc;
+            break;
+          case "d":
+            interval = d3.time.day.utc;
+            break;
+          case "w":
+            interval = d3.time.week.utc;
+            break;
+          case "M":
+            interval = d3.time.month.utc;
+            break;
+          case "y":
+            interval = d3.time.year.utc;
+            break;
+          default:
+            console.log("Unexpected snap interval: " + snapTo + ", defaulting to seconds.");
+            interval = d3.time.second.utc;
+        }
+        return interval;
       }
     }
   }

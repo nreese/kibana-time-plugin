@@ -8,7 +8,7 @@ define(function (require) {
   
   module.controller('KbnTimeVisController', function (quickRanges, timeUnits, $scope, $rootScope, Private, $filter, $timeout) {
     const TIMESLIDER_INSTR = "Click and drag to select a time range."
-    const DATE_FORMAT = 'MMMM Do YYYY, HH:mm:ss';
+    const DATE_FORMAT = 'MMMM Do YYYY, HH:mm:ss z';
     $rootScope.plugin = {
       timePlugin: {}
     };
@@ -44,6 +44,18 @@ define(function (require) {
       unit: 'm',
       preview: undefined,
       round: false
+    };
+    $scope.sliderRoundOptions = [
+      {text: 'Second', value: 's'},
+      {text: 'Minute', value: 'm'},
+      {text: 'Hour', value: 'h'},
+      {text: 'Day', value: 'd'},
+      {text: 'Week', value: 'w'},
+      {text: 'Month', value: 'M'},
+      {text: 'Year', value: 'y'},
+    ];
+    $scope.slider = {
+      roundUnit: 's',
     };
     $scope.time = {
       from: moment(),
@@ -162,6 +174,12 @@ define(function (require) {
       expectedTo = $scope.time.to, true;
       updateKbnTime();
     };
+
+    $scope.snapToNearest = function() {
+      $scope.$broadcast('timesliderSnapToNearest', {
+        snapToNearest: $scope.slider.roundUnit
+      });
+    }
 
     function updateKbnTime() {
       $rootScope.$$timefilter.time.from = expectedFrom;
