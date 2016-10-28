@@ -1,11 +1,11 @@
-define(function (require) {
-  var moment = require('moment');
-  var dateMath = require('ui/utils/dateMath');
-  var module = require('ui/modules').get('kibana/kibana-time-plugin', ['kibana', 'BootstrapAddons']);
-  var _ = require('lodash');
-  require('ui/timepicker/quick_ranges');
-  require('ui/timepicker/time_units');
-  
+import _ from 'lodash';
+import dateMath from '@elastic/datemath';
+import moment from 'moment';
+import 'ui/timepicker/quick_ranges';
+import 'ui/timepicker/time_units';
+import uiModules from 'ui/modules';
+const module = uiModules.get('kibana/kibana-time-plugin', ['kibana', 'ktp-ui.bootstrap.carousel', 'BootstrapAddons']);
+
   module.controller('KbnTimeVisController', function (quickRanges, timeUnits, $scope, $rootScope, Private, $filter, $timeout) {
     const TIMESLIDER_INSTR = "Click and drag to select a time range."
     const DATE_FORMAT = 'MMMM Do YYYY, HH:mm:ss z';
@@ -246,4 +246,3 @@ define(function (require) {
       return 'now-' + $scope.relative.count + $scope.relative.unit + ($scope.relative.round ? '/' + $scope.relative.unit : '');
     }
   });
-});
