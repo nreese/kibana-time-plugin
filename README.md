@@ -11,17 +11,19 @@ Use this widget to view and edit the time range from within dashboards. Use the 
 Use the time animation controls to easily explore data by time blocks. Click and drag on the time animation bar to select a time range. Grab the brush to move or resize. Click outside of the brush to remove. Use the step buttons to advance to the next time block.
 ![preview-edit](/resources/time_animation.png)
 
-
-
 # Install
+## Kibana 5.0.0
+```bash
+./bin/kibana-plugin install https://github.com/nreese/kibana-time-plugin/releases/download/v5.0.0/kibana.zip
+```
+
 ## Kibana 4.x
 ```bash
 ./bin/kibana plugin -i kibana-time-plugin -u https://github.com/nreese/kibana-time-plugin/archive/4.x.zip
 ```
-## Kibana 5.x
-Unzip https://github.com/nreese/kibana-time-plugin/archive/5.0.zip under KIBANA_HOME/plugins/kibana-time-plugin
 
-# Compatibility
-The plugin is compatible with following Versions (other not tested yet):
-* kibana (=4.4)
-* kibana 5.0
+# Uninstall
+## Kibana 5.x
+```bash
+./bin/kibana-plugin remove kibana-time-plugin
+```
