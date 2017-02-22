@@ -107,6 +107,15 @@ angular.module('BootstrapAddons')
         if(snappedStop.getTime() >= scope.end.getTime()) {
           snappedStop = scope.end;
         }
+
+        //ensure extent rounding does not miss time fragments at beginning or end of range 
+        if (scope.start.getTime() === start.getTime()) {
+          snappedStart = scope.start;
+        }
+        if (scope.end.getTime() === stop.getTime()) {
+          snappedStop = scope.end;
+        }
+
         return [snappedStart, snappedStop];
       }
 
