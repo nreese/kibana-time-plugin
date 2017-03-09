@@ -14,7 +14,9 @@ Use this widget to view and edit the time range from within dashboards. Use the 
 # Install
 ## Kibana 5.0.0
 ```bash
-./bin/kibana-plugin install https://github.com/nreese/kibana-time-plugin/releases/download/v5.0.0/kibana.zip
+cd KIBANA_HOME/plugins
+git clone git@github.com:nreese/kibana-time-plugin.git
+vi kibana-time-plugin/package.js //set version to match kibana version
 ```
 
 ## Kibana 4.x
