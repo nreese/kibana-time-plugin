@@ -6,6 +6,21 @@ import 'ui/timepicker/time_units';
 import uiModules from 'ui/modules';
 const module = uiModules.get('kibana/kibana-time-plugin', ['kibana', 'ktp-ui.bootstrap.carousel', 'BootstrapAddons']);
 
+const SimpleEmitter = require('ui/utils/simple_emitter');
+const msearchEmitter = new SimpleEmitter;
+module.config(function($httpProvider) {
+  $httpProvider.interceptors.push(function() {
+    return {
+      response: function(resp) {
+        if (resp.config.url.includes('_msearch')) {
+          msearchEmitter.emit('msearch:response');
+        }
+        return resp;
+      }
+    }
+  });
+});
+
   module.controller('KbnTimeVisController', function (quickRanges, timeUnits, $scope, $rootScope, Private, $filter, $timeout) {
     const TIMESLIDER_INSTR = "Click and drag to select a time range."
     const DATE_FORMAT = 'MMMM Do YYYY, HH:mm:ss z';
@@ -61,6 +76,24 @@ const module = uiModules.get('kibana/kibana-time-plugin', ['kibana', 'ktp-ui.boo
       from: moment(),
       to: moment()
     };
+
+    //custom playback that waits for kibana msearch response before advancing timeframe
+    let nextStep = null;
+    $scope.kibanaPlayback = {
+      play: function(nextCallback) {
+        nextCallback();
+        const delay = _.get($scope.vis.params, 'animation_frame_delay', 1) * 1000;
+        nextStep = _.debounce(nextCallback, delay);
+      },
+      pause: function() {
+        nextStep = null;
+      }
+    }
+    msearchEmitter.on('msearch:response', function() {
+      if (nextStep) {
+        nextStep();
+      }
+    });
 
     //When timeslider carousel slide is not displayed, it has a width of 0
     //attach click handler to carousel controls to redraw

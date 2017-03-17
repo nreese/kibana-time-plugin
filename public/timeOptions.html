@@ -22,3 +22,13 @@
     Show Animation Slide
   </label>
 </div>
+<div ng-show="vis.params.enable_animation">
+  <div class="form-group">
+    <label>
+      Animation frame delay (sec)
+    </label>
+    <input type="number" class="form-control"
+      min="0"
+      ng-model="vis.params.animation_frame_delay">
+  </div>
+</div>
