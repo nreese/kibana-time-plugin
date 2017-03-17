@@ -1,0 +1,13 @@
+{
+  "name": "kibana-time-plugin",
+  "description": "kibana plugin",
+  "authors": [
+    "nreese <reese.nathan@gmail.com>"
+  ],
+  "license": "Apache License 2.0",
+  "homepage": "https://github.com/nreese/kibana-time-plugin",
+  "private": true,
+  "dependencies": {
+    "bootstrap-addons": "https://github.com/nreese/bootstrap-addons/files/851515/bootstrap-addons.zip"
+  }
+}
