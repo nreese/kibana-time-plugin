@@ -7,7 +7,7 @@ import uiModules from 'ui/modules';
 const module = uiModules.get('kibana/kibana-time-plugin', ['kibana', 'ktp-ui.bootstrap.carousel', 'BootstrapAddons']);
 
 const SimpleEmitter = require('ui/utils/simple_emitter');
-const msearchEmitter = new SimpleEmitter;
+const msearchEmitter = new SimpleEmitter();
 module.config(function($httpProvider) {
   $httpProvider.interceptors.push(function() {
     return {
@@ -86,7 +86,10 @@ module.config(function($httpProvider) {
         nextStep = _.debounce(nextCallback, delay);
       },
       pause: function() {
-        nextStep = null;
+        if (nextStep) {
+          nextStep.cancel();
+          nextStep = null;
+        }
       }
     }
     msearchEmitter.on('msearch:response', function() {
