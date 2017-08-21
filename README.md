@@ -21,6 +21,16 @@ bower install
 vi kibana-time-plugin/package.js //set version to match kibana version
 ```
 
+## Kibana 5.5
+```bash
+cd KIBANA_HOME/plugins
+git clone git@github.com:nreese/kibana-time-plugin.git
+cd KIBANA_HOME/plugins/kibana-time-plugin
+git checkout 5.5
+bower install
+vi kibana-time-plugin/package.js //set version to match kibana version
+```
+
 ## Kibana 4.x
 ```bash
 ./bin/kibana plugin -i kibana-time-plugin -u https://github.com/nreese/kibana-time-plugin/archive/4.x.zip
