@@ -282,4 +282,6 @@ module.config(function($httpProvider) {
     function getRelativeString() {
       return 'now-' + $scope.relative.count + $scope.relative.unit + ($scope.relative.round ? '/' + $scope.relative.unit : '');
     }
+
+    $scope.renderComplete();
   });
