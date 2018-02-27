@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import dateMath from '@elastic/datemath';
 import moment from 'moment';
-import 'ui/timepicker/quick_ranges';
 import 'ui/timepicker/time_units';
 import { SimpleEmitter } from 'ui/utils/simple_emitter';
 import { uiModules } from 'ui/modules';
@@ -22,7 +21,7 @@ module.config(function($httpProvider) {
   });
 });
 
-  module.controller('KbnTimeVisController', function (quickRanges, timeUnits, $scope, $rootScope, Private, $filter, $timeout) {
+  module.controller('KbnTimeVisController', function (config, timeUnits, $scope, $rootScope, Private, $filter, $timeout) {
     const TIMESLIDER_INSTR = "Click and drag to select a time range."
     const DATE_FORMAT = 'MMMM Do YYYY, HH:mm:ss z';
     $rootScope.plugin = {
@@ -44,7 +43,10 @@ module.config(function($httpProvider) {
     var expectedFrom = moment();
     var expectedTo = moment();
     $scope.animationTitle = TIMESLIDER_INSTR;
-    $scope.quickLists = quickRanges;
+    
+    const quickRanges = config.get('timepicker:quickRanges');
+    $scope.quickLists = _(quickRanges).groupBy('section').values().value();
+    
     $scope.units = timeUnits;
     $scope.relativeOptions = [
       {text: 'Seconds ago', value: 's'},
