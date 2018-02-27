@@ -43,10 +43,10 @@ module.config(function($httpProvider) {
     var expectedFrom = moment();
     var expectedTo = moment();
     $scope.animationTitle = TIMESLIDER_INSTR;
-    
+
     const quickRanges = config.get('timepicker:quickRanges');
-    $scope.quickLists = _(quickRanges).groupBy('section').values().value();
-    
+    $scope.quickLists = quickRanges;
+
     $scope.units = timeUnits;
     $scope.relativeOptions = [
       {text: 'Seconds ago', value: 's'},
