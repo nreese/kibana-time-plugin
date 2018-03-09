@@ -12,12 +12,25 @@ Use this widget to view and edit the time range from within dashboards. Use the 
 ![alt text](https://github.com/nreese/kibana-time-plugin/blob/gh-pages/images/time.gif)
 
 # Install
-## Kibana 6.0
+## Kibana 6.0 - 6.0
 ```bash
 cd KIBANA_HOME/plugins
 git clone git@github.com:nreese/kibana-time-plugin.git
 cd KIBANA_HOME/plugins/kibana-time-plugin
+
 bower install
+```
+
+## Kibana 6.0 - 6.1
+```bash
+cd KIBANA_HOME/plugins
+git clone git@github.com:nreese/kibana-time-plugin.git
+cd KIBANA_HOME/plugins/kibana-time-plugin
+
+git checkout 6.0
+
+bower install
+vi kibana-time-plugin/package.js //set version to match kibana version
 ```
 
 ## Kibana 5.5 - 5.6
