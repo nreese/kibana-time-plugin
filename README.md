@@ -19,6 +19,7 @@ git clone git@github.com:nreese/kibana-time-plugin.git
 cd KIBANA_HOME/plugins/kibana-time-plugin
 
 bower install
+vi kibana-time-plugin/package.js //set version to match kibana version
 ```
 
 ## Kibana 6.0 - 6.1
