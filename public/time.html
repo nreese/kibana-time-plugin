@@ -1,6 +1,6 @@
 <div ng-controller="KbnTimeVisController" class="time-vis">
   <h3 ng-show="config.title">{{config.title}}</h3>
-  
+
   <carousel interval="0">
       <slide ng-if="vis.params.enable_quick" active="activeSlide.quick">
         <h4 style="margin-top: 0px; margin-bottom: 2px;">
@@ -104,16 +104,16 @@
 
       <slide ng-if="vis.params.enable_animation">
         <h4 style="margin-top: 0px; margin-bottom: 2px;">
-          <strong><i aria-hidden="true" class="fa fa-clock-o"></i> Time Animation</strong> 
+          <strong><i aria-hidden="true" class="fa fa-clock-o"></i> Time Animation</strong>
           <pretty-duration class="ng-isolate-scope" to="time.to" from="time.from"></pretty-duration>
         </h4>
         <p>
           {{animationTitle}}
         </p>
-        <timeslider start="time.absolute_from.toDate()" end="time.absolute_to.toDate()" ticks="10" on-change="filterByTime" playback="kibanaPlayback" on-clear="removeTimeFilter" style="margin-left: 43px; margin-right: 43px;"></timeslider>
+        <timeslider start="getStartTime()" end="getEndTime()" ticks="10" on-change="filterByTime" playback="kibanaPlayback" on-clear="removeTimeFilter" style="margin-left: 43px; margin-right: 43px;"></timeslider>
         <div class="small" style="display: inline-block;">
           <label style="float:left;">
-            round to the nearest 
+            round to the nearest
           </label>
           <select
             ng-model="slider.roundUnit"
@@ -124,6 +124,6 @@
         </div>
       </slide>
     </carousel>
-  
+
 
 </div>

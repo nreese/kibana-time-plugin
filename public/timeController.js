@@ -285,5 +285,29 @@ module.config(function($httpProvider) {
       return 'now-' + $scope.relative.count + $scope.relative.unit + ($scope.relative.round ? '/' + $scope.relative.unit : '');
     }
 
+    // avoid digest cycle overflow by cachine start Date
+    let lastStart;
+    $scope.getStartTime = function() {
+      const start = $scope.time.absolute_from.toDate();
+      if (lastStart && lastStart.getTime() === start.getTime()) {
+        return lastStart;
+      }
+
+      lastStart = start;
+      return start;
+    }
+
+    // avoid digest cycle overflow by cachine end Date
+    let lastEnd;
+    $scope.getEndTime = function() {
+      const end = $scope.time.absolute_to.toDate();
+      if (lastEnd && lastEnd.getTime() === end.getTime()) {
+        return lastEnd;
+      }
+
+      lastEnd = end;
+      return end;
+    }
+
     $scope.renderComplete();
   });
