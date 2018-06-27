@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import dateMath from '@elastic/datemath';
+import dateMath from '@kbn/datemath';
 import moment from 'moment';
 import 'ui/timepicker/time_units';
 import { SimpleEmitter } from 'ui/utils/simple_emitter';
+import { timeUnits } from 'ui/timepicker/time_units';
 import { uiModules } from 'ui/modules';
-//import uiModules from 'ui/modules';
 const module = uiModules.get('kibana/kibana-time-plugin', ['kibana', 'ktp-ui.bootstrap.carousel', 'BootstrapAddons']);
 
 const msearchEmitter = new SimpleEmitter();
@@ -21,17 +21,14 @@ module.config(function($httpProvider) {
   });
 });
 
-  module.controller('KbnTimeVisController', function (config, timeUnits, $scope, $rootScope, Private, $filter, $timeout) {
+  module.controller('KbnTimeVisController', function (config, $scope, $rootScope, Private, $filter, $timeout, timefilter) {
     const TIMESLIDER_INSTR = "Click and drag to select a time range."
     const DATE_FORMAT = 'MMMM Do YYYY, HH:mm:ss z';
     $rootScope.plugin = {
       timePlugin: {}
     };
 
-    $rootScope.$watchMulti([
-      '$$timefilter.time.from',
-      '$$timefilter.time.to'
-    ], setTime);
+    $scope.$listen(timefilter, 'update', setTime);
 
     var changeVisOff = $rootScope.$on(
       'change:vis',
@@ -152,7 +149,7 @@ module.config(function($httpProvider) {
           absolute_to: dateMath.parse(to, true)
         }
         setRelativeParts(to, from);
-        if('quick' === $rootScope.$$timefilter.time.mode) {
+        if('quick' === timefilter.time.mode) {
           $scope.activeSlide.quick = true;
           for(var i=0; i<quickRanges.length; i++) {
             if(quickRanges[i].from === from && quickRanges[i].to === to) {
@@ -160,7 +157,7 @@ module.config(function($httpProvider) {
               break;
             }
           }
-        } else if ('relative' === $rootScope.$$timefilter.time.mode) {
+        } else if ('relative' === timefilter.time.mode) {
           $scope.activeSlide.relative = true;
         } else {
           $scope.activeSlide.absolute = true;
@@ -169,8 +166,8 @@ module.config(function($httpProvider) {
       }
     }
     setTime([
-      $rootScope.$$timefilter.time.from,
-      $rootScope.$$timefilter.time.to]);
+      timefilter.time.from,
+      timefilter.time.to]);
 
     $scope.filterByTime = function(start, end) {
       $scope.time.mode = 'absolute';
@@ -221,9 +218,11 @@ module.config(function($httpProvider) {
     }
 
     function updateKbnTime() {
-      $rootScope.$$timefilter.time.from = expectedFrom;
-      $rootScope.$$timefilter.time.to = expectedTo;
-      $rootScope.$$timefilter.time.mode = $scope.time.mode;
+      timefilter.time = {
+        from: expectedFrom,
+        to: expectedTo,
+        mode: $scope.time.mode
+      };
 
       //keep other carousel slides in sync with new values
       if($scope.time.mode !== 'absolute') {
