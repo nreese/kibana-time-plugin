@@ -28,7 +28,11 @@ module.config(function($httpProvider) {
       timePlugin: {}
     };
 
-    $scope.$listen(timefilter, 'update', setTime);
+    let lastUpdated = 0;
+
+    $scope.$listen(timefilter, 'update', () => {
+      $scope.$evalAsync(() => setTime());
+    });
 
     var changeVisOff = $rootScope.$on(
       'change:vis',
@@ -72,10 +76,6 @@ module.config(function($httpProvider) {
     $scope.slider = {
       roundUnit: 's',
     };
-    $scope.time = {
-      from: moment(),
-      to: moment()
-    };
 
     //custom playback that waits for kibana msearch response before advancing timeframe
     let nextStep = null;
@@ -115,25 +115,17 @@ module.config(function($httpProvider) {
       }
     }, 0);
 
-    function setTime(rangeA) {
-      var from = rangeA[0];
-      var to = rangeA[1];
-      var ours_ms = {
-        from: dateMath.parse(expectedFrom).toDate().getTime(),
-        to: dateMath.parse(expectedTo, true).toDate().getTime()
-      }
-      var theirs_ms = {
-        from: dateMath.parse(from).toDate().getTime(),
-        to: dateMath.parse(to).toDate().getTime()
-      }
-      console.log("from, ours: " + ours_ms.from + ", theirs: " + theirs_ms.from);
-      console.log("to, ours: " + ours_ms.to + ", theirs: " + theirs_ms.to);
+    function setTime() {
 
-      //setTime is called from watching kibana's timefilter
+      const now = Date.now();
+
+      //setTime is called from subscribing to kibana's timefilter
       //Avoid updating our $scope if the timefilter change is triggered by us
-      if(Math.abs(ours_ms.from - theirs_ms.from) > 500
-        || Math.abs(ours_ms.to - theirs_ms.to) > 500) {
+      if(now - lastUpdated > 200) {
         console.log("updating KbnTimeVisController.$scope stay in sync with kibana timefilter");
+        const from = timefilter.time.from;
+        const to = timefilter.time.to;
+
         //clean up old selections
         $scope.activeSlide = {
           absolute: false,
@@ -165,9 +157,7 @@ module.config(function($httpProvider) {
         updateTimeslider();
       }
     }
-    setTime([
-      timefilter.time.from,
-      timefilter.time.to]);
+    setTime();
 
     $scope.filterByTime = function(start, end) {
       $scope.time.mode = 'absolute';
@@ -218,6 +208,7 @@ module.config(function($httpProvider) {
     }
 
     function updateKbnTime() {
+      lastUpdated = Date.now();
       timefilter.time = {
         from: expectedFrom,
         to: expectedTo,
@@ -282,6 +273,30 @@ module.config(function($httpProvider) {
 
     function getRelativeString() {
       return 'now-' + $scope.relative.count + $scope.relative.unit + ($scope.relative.round ? '/' + $scope.relative.unit : '');
+    }
+
+    // avoid digest cycle overflow by cachine start Date
+    let lastStart;
+    $scope.getStartTime = function() {
+      const start = $scope.time.absolute_from.toDate();
+      if (lastStart && lastStart.getTime() === start.getTime()) {
+        return lastStart;
+      }
+
+      lastStart = start;
+      return start;
+    }
+
+    // avoid digest cycle overflow by cachine end Date
+    let lastEnd;
+    $scope.getEndTime = function() {
+      const end = $scope.time.absolute_to.toDate();
+      if (lastEnd && lastEnd.getTime() === end.getTime()) {
+        return lastEnd;
+      }
+
+      lastEnd = end;
+      return end;
     }
 
     $scope.renderComplete();
