@@ -21,7 +21,7 @@ cd KIBANA_HOME/plugins/kibana-time-plugin
 git checkout 6.3
 
 bower install
-vi kibana-time-plugin/package.js //set version to match kibana version
+vi kibana-time-plugin/package.json //set version to match kibana version
 ```
 
 ## Kibana 6.2
@@ -33,7 +33,7 @@ cd KIBANA_HOME/plugins/kibana-time-plugin
 git checkout 6.2
 
 bower install
-vi kibana-time-plugin/package.js //set version to match kibana version
+vi kibana-time-plugin/package.json //set version to match kibana version
 ```
 
 ## Kibana 6.0 - 6.1
@@ -45,7 +45,7 @@ cd KIBANA_HOME/plugins/kibana-time-plugin
 git checkout 6.0
 
 bower install
-vi kibana-time-plugin/package.js //set version to match kibana version
+vi kibana-time-plugin/package.json //set version to match kibana version
 ```
 
 ## Kibana 5.5 - 5.6
@@ -57,7 +57,7 @@ cd KIBANA_HOME/plugins/kibana-time-plugin
 git checkout 5.5
 
 bower install
-vi kibana-time-plugin/package.js //set version to match kibana version
+vi kibana-time-plugin/package.json //set version to match kibana version
 ```
 
 ## Kibana 5.0 - 5.4
@@ -69,7 +69,7 @@ cd KIBANA_HOME/plugins/kibana-time-plugin
 git checkout 5.4
 
 bower install
-vi kibana-time-plugin/package.js //set version to match kibana version
+vi kibana-time-plugin/package.json //set version to match kibana version
 ```
 
 ## Kibana 4.x
