@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import dateMath from '@kbn/datemath';
+import dateMath from '@elastic/datemath';
 import moment from 'moment';
 import 'ui/timepicker/time_units';
 import { SimpleEmitter } from 'ui/utils/simple_emitter';
