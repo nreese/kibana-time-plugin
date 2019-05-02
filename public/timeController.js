@@ -1,9 +1,7 @@
 import _ from 'lodash';
 import dateMath from '@elastic/datemath';
 import moment from 'moment';
-import 'ui/timepicker/time_units';
 import { SimpleEmitter } from 'ui/utils/simple_emitter';
-import { timeUnits } from 'ui/timepicker/time_units';
 import { timefilter } from 'ui/timefilter';
 import { uiModules } from 'ui/modules';
 const module = uiModules.get('kibana/kibana-time-plugin', ['kibana', 'ktp-ui.bootstrap.carousel', 'BootstrapAddons']);
@@ -51,7 +49,15 @@ module.config(function($httpProvider) {
     const quickRanges = config.get('timepicker:quickRanges');
     $scope.quickLists = quickRanges;
 
-    $scope.units = timeUnits;
+    $scope.units = {
+      s: 'second',
+      m: 'minute',
+      h: 'hour',
+      d: 'day',
+      w: 'week',
+      M: 'month',
+      y: 'year'
+    };
     $scope.relativeOptions = [
       {text: 'Seconds ago', value: 's'},
       {text: 'Minutes ago', value: 'm'},
